@@ -24,7 +24,6 @@ from dateutil import *
 from datetime import date
 import pandas as pd
 import requests
-from datetime import datetime as dt
 
 # Initilize flask app
 app = Flask(__name__)
@@ -120,55 +119,8 @@ def github():
         "forks": fork_count
         }
         print(json_response_fork)
-        return jsonify(json_response_fork)
-    
-    today = date.today()
-    pull_req_response = []
+        return jsonify(json_response_fork)  
 
-    #GET PULL REQUESTS
-    for i in range(2):
-        per_page = 'per_page=100'
-        page = 'page='
-        search_query = 'openai/openai-cookbook' + '/pulls?state=all' + "&" + per_page+ "&" + page + f'{i}'
-        # Append the search query to the GitHub API URL 
-        query_url = GITHUB_URL + "repos/" + search_query
-        # requsets.get will fetch requested query_url from the GitHub API
-        search_pull_requests = requests.get(query_url, headers=headers, params=params)
-        # Convert the data obtained from GitHub API to JSON format
-        search_pull_requests = search_pull_requests.json()
-        pull_items = []
-        pull_items = search_pull_requests
-        if pull_items is None:
-            continue
-        for pull_req in pull_items:
-            label_name = []
-            data = {}
-            current_pull_req = pull_req
-            # Get issue number
-            created_at_date = dt.strptime(current_pull_req["created_at"][0:10], "%Y-%m-%d")
-            max_date = dt.strptime("2020-11-19", "%Y-%m-%d")
-            if created_at_date > max_date:
-                data['pull_req_number'] = current_pull_req["number"]
-                # Get created date of issue
-                data['created_at'] = current_pull_req["created_at"][0:10]
-                if current_pull_req["closed_at"] == None:
-                    data['closed_at'] = current_pull_req["closed_at"]
-                else:
-                    # Get closed date of issue
-                    data['closed_at'] = current_pull_req["closed_at"][0:10]
-                for label in current_pull_req["labels"]:
-                    # Get label name of issue
-                    label_name.append(label["name"])
-                data['labels'] = label_name
-                # It gives state of issue like closed or open
-                data['State'] = current_pull_req["state"]
-                # Get Author of issue
-                data['Author'] = current_pull_req["user"]["login"]
-                pull_req_response.append(data)
-        
-    print("pulls:\n")  
-     
-    #Fetch ISSUES DATA
     today = date.today()
 
     issues_reponse = []
@@ -319,15 +271,10 @@ def github():
         "type": "closed_at",
         "repo": repo_name.split("/")[1]
     }
-    pull_request_body = {
-        "pull": pull_req_response,
-        "type": "pull_request",
-        "repo": repo_name.split("/")[1]
-    }
 
     # Update your Google cloud deployed LSTM app URL (NOTE: DO NOT REMOVE "/")
     LSTM_API_URL = "https://lstm-hzmrorpica-uc.a.run.app/" + "api/forecast"
-    LSTM_API_URL_FINAL = "https://lstm-hzmrorpica-uc.a.run.app/"
+
     '''
     Trigger the LSTM microservice to forecasted the created issues
     The request body consists of created issues obtained from GitHub API in JSON format
@@ -336,8 +283,7 @@ def github():
     created_at_response = requests.post(LSTM_API_URL,
                                         json=created_at_body,
                                         headers={'content-type': 'application/json'})
-    print("create req res: ",created_at_response.json())
-
+    
     '''
     Trigger the LSTM microservice to forecasted the closed issues
     The request body consists of closed issues obtained from GitHub API in JSON format
@@ -346,10 +292,7 @@ def github():
     closed_at_response = requests.post(LSTM_API_URL,
                                        json=closed_at_body,
                                        headers={'content-type': 'application/json'})
-    pull_request_rpnse = requests.post(LSTM_API_URL_FINAL+"api/pulls",
-                                       json=pull_request_body,
-                                       headers={'content-type': 'application/json'})
-    print("pull req res: ",pull_request_rpnse.json())
+    
     '''
     Create the final response that consists of:
         1. GitHub repository data obtained from GitHub API
@@ -367,9 +310,6 @@ def github():
         },
         "closedAtImageUrls": {
             **closed_at_response.json(),
-        },
-        "pullReqImageUrls": {
-            **pull_request_rpnse.json(),
         },
     }
     # Return the response back to client (React app)
