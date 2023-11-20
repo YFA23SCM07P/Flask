@@ -192,7 +192,7 @@ def github():
     ''' 
     created_at = df['created_at']
     week_issue_created = pd.to_datetime(
-        pd.Series(created_at), format='%Y/%m/%d')
+        pd.Series(created_at), format='%Y-%m-%d')
     week_issue_created.index = week_issue_created.dt.to_period('w')
     week_issue_created = week_issue_created.groupby(level=0).size()
     week_issue_created = week_issue_created.reindex(pd.period_range(
@@ -210,7 +210,7 @@ def github():
     
     closed_at = df['closed_at'].sort_values(ascending=True)
     week_issue_closed = pd.to_datetime(
-        pd.Series(closed_at), format='%Y/%m/%d')
+        pd.Series(closed_at), format='%Y-%m-%d')
     week_issue_closed.index = week_issue_closed.dt.to_period('w')
     week_issue_closed = week_issue_closed.groupby(level=0).size()
     week_issue_closed = week_issue_closed.reindex(pd.period_range(
