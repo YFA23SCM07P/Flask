@@ -187,6 +187,40 @@ def github():
     dataFrameCreated.columns = ['date', 'count']
 
     '''
+    Weekly Created Issues
+    Format the data by grouping the data by month
+    ''' 
+    created_at = df['created_at']
+    week_issue_created = pd.to_datetime(
+        pd.Series(created_at), format='%Y/%m/%d')
+    week_issue_created.index = week_issue_created.dt.to_period('w')
+    week_issue_created = week_issue_created.groupby(level=0).size()
+    week_issue_created = week_issue_created.reindex(pd.period_range(
+        week_issue_created.index.min(), week_issue_created.index.max(), freq='w'), fill_value=0)
+    week_issue_created_dict = week_issue_created.to_dict()
+    week_created_at_issues = []
+    for key in week_issue_created_dict.keys():
+        array = [str(key), week_issue_created_dict[key]]
+        week_created_at_issues.append(array)
+
+    '''
+    Weekly Closed Issues
+    Format the data by grouping the data by month
+    ''' 
+    
+    closed_at = df['closed_at'].sort_values(ascending=True)
+    week_issue_closed = pd.to_datetime(
+        pd.Series(closed_at), format='%Y/%m/%d')
+    week_issue_closed.index = week_issue_closed.dt.to_period('w')
+    week_issue_closed = week_issue_closed.groupby(level=0).size()
+    week_issue_closed = week_issue_closed.reindex(pd.period_range(
+        week_issue_closed.index.min(), week_issue_closed.index.max(), freq='w'), fill_value=0)
+    week_issue_closed_dict = week_issue_closed.to_dict()
+    week_closed_at_issues = []
+    for key in week_issue_closed_dict.keys():
+        array = [str(key), week_issue_closed_dict[key]]
+        week_closed_at_issues.append(array)
+    '''
     Monthly Created Issues
     Format the data by grouping the data by month
     ''' 
