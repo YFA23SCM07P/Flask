@@ -71,6 +71,56 @@ def github():
     # Convert the data obtained from GitHub API to JSON format
     repository = repository.json()
 
+    stars_count=[]
+    fork_count=[]
+    if repo_name[0] == 'X':
+        repo_list = repo_name.split()
+        repo_list.pop(0)
+        for i in repo_list:
+            GITHUB_URL = f"https://api.github.com/"
+            headers = {
+            "Authorization": f'token {token}'
+            }
+            params = {
+            "state": "open"
+            }
+            repository_url = GITHUB_URL + "repos/" + i
+            # Fetch GitHub data from GitHub API
+            repository = requests.get(repository_url, headers=headers)
+            # Convert the data obtained from GitHub API to JSON format
+            repository = repository.json()
+            stars_count.append([i.split("/")[1], repository["stargazers_count"]])
+        json_response_stars = {
+        "stars": stars_count
+        }
+        print(json_response_stars)
+        return jsonify(json_response_stars)
+
+    if repo_name[0] == 'Y':
+        repo_list = repo_name.split()
+        repo_list.pop(0)
+        for i in repo_list:
+            GITHUB_URL = f"https://api.github.com/"
+            headers = {
+            "Authorization": f'token {token}'
+            }
+            params = {
+            "state": "open"
+            }
+            print(headers)
+            repository_url = GITHUB_URL + "repos/" + i
+            # Fetch GitHub data from GitHub API
+            repository = requests.get(repository_url, headers=headers)
+            # Convert the data obtained from GitHub API to JSON format
+            repository = repository.json()
+            print(repository)
+            fork_count.append([i.split("/")[1], repository["forks_count"]])
+        json_response_fork = {
+        "forks": fork_count
+        }
+        print(json_response_fork)
+        return jsonify(json_response_fork)  
+
     today = date.today()
 
     issues_reponse = []
