@@ -300,7 +300,9 @@ def github():
     '''
     json_response = {
         "created": created_at_issues,
+        "created_weekly": week_created_at_issues,
         "closed": closed_at_issues,
+        "closed_weekly": week_closed_at_issues,
         "starCount": repository["stargazers_count"],
         "forkCount": repository["forks_count"],
         "createdAtImageUrls": {
