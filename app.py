@@ -133,7 +133,7 @@ def github():
     contributors_response = []
 
 #GET PULL REQUESTS
-    for i in range(2):
+    for i in range(24):
         per_page = 'per_page=100'
         page = 'page='
         # Calculate the start and end dates for the desired two-month range
