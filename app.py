@@ -64,7 +64,7 @@ def github():
     repo_name = body['repository']
     # Add your own GitHub Token to run it local
     token = os.environ.get(
-        'GITHUB_TOKEN', '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')
+        'GITHUB_TOKEN', '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')
     GITHUB_URL = f"https://api.github.com/"
     headers = {
         "Authorization": f'token {token}'
@@ -453,7 +453,7 @@ def getRepoDetails():
         search_q = types + ' '+repo+' '+state
         repository_url = GITHUB_URL + "search/issues?q=" + search_q+"&per_page=1"
         # Fetch GitHub data from GitHub API
-        repository = requests.get(repository_url, headers=headers)
+        repository = requests.get(repository_url, headers=headers) 
         
         # Convert the data obtained from GitHub API to JSON format
         try:
