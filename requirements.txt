@@ -1,6 +1,6 @@
 Flask
 github3.py
-pandas
+pandas==1.5.3
 flask-cors
 requests-async
 flask[async]
