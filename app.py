@@ -133,7 +133,7 @@ def github():
     contributors_response = []
 
 #GET PULL REQUESTS
-    for i in range(10):
+    for i in range(24):
         per_page = 'per_page=100'
         page = 'page='
         search_query = 'angular/angular' + '/pulls?state=all' + "&" + per_page+ "&" + page + f'{i}'
