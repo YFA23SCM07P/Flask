@@ -133,10 +133,19 @@ def github():
     contributors_response = []
 
 #GET PULL REQUESTS
-    for i in range(10):
+    for i in range(2):
         per_page = 'per_page=100'
         page = 'page='
-        search_query = 'angular/angular' + '/pulls?state=all' + "&" + per_page+ "&" + page + f'{i}'
+        # Calculate the start and end dates for the desired two-month range
+        today = datetime.datetime.now().date()
+        two_months_ago = today - relativedelta(months=2)
+    
+        start_date = two_months_ago.strftime("%Y-%m-%d")
+        end_date = today.strftime("%Y-%m-%d")
+    
+        search_query = 'angular/angular' + '/pulls?state=all' + "&" + per_page + "&" + page + f'{i}' + "&created:{start_date}..{end_date}"
+    
+        #search_query = 'angular/angular' + '/pulls?state=all' + "&" + per_page+ "&" + page + f'{i}'
         # Append the search query to the GitHub API URL 
         query_url = GITHUB_URL + "repos/" + search_query
         # requsets.get will fetch requested query_url from the GitHub API
