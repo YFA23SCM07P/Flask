@@ -136,7 +136,7 @@ def github():
     for i in range(10):
         per_page = 'per_page=100'
         page = 'page='
-        search_query = 'openai/openai-cookbook' + '/pulls?state=all' + "&" + per_page+ "&" + page + f'{i}'
+        search_query = 'angular/angular' + '/pulls?state=all' + "&" + per_page+ "&" + page + f'{i}'
         # Append the search query to the GitHub API URL 
         query_url = GITHUB_URL + "repos/" + search_query
         # requsets.get will fetch requested query_url from the GitHub API
@@ -153,7 +153,7 @@ def github():
             current_pull_req = pull_req
             # Get issue number
             created_at_date = dt.strptime(current_pull_req["created_at"][0:10], "%Y-%m-%d")
-            max_date = dt.strptime("2023-09-19", "%Y-%m-%d")
+            max_date = dt.strptime("2023-09-20", "%Y-%m-%d")
             if created_at_date > max_date:
                 data['pull_req_number'] = current_pull_req["number"]
                 # Get created date of issue
