@@ -56,6 +56,7 @@ def github():
     body = request.get_json()
     # Extract the choosen repositories from the request
     repo_name = body['repository']
+    organization_name = repo_name.split("/")[0]
     # Add your own GitHub Token to run it local
     token = os.environ.get(
         'GITHUB_TOKEN', 'YOUR_GITHUB_TOKEN')
@@ -136,7 +137,7 @@ def github():
     for i in range(10):
         per_page = 'per_page=100'
         page = 'page='
-        search_query = 'angular/angular' + '/pulls?state=all' + "&" + per_page+ "&" + page + f'{i}'
+        search_query = f'{organization_name}/{repo_name}' + '/pulls?state=all' + "&" + per_page+ "&" + page + f'{i}'
         # Append the search query to the GitHub API URL 
         query_url = GITHUB_URL + "repos/" + search_query
         # requsets.get will fetch requested query_url from the GitHub API
