@@ -153,7 +153,7 @@ def github():
             current_pull_req = pull_req
             # Get issue number
             created_at_date = dt.strptime(current_pull_req["created_at"][0:10], "%Y-%m-%d")
-            max_date = dt.strptime("2020-11-19", "%Y-%m-%d")
+            max_date = dt.strptime("2023-09-19", "%Y-%m-%d")
             if created_at_date > max_date:
                 data['pull_req_number'] = current_pull_req["number"]
                 # Get created date of issue
